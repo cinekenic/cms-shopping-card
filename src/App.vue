@@ -14,11 +14,12 @@ export default {
     Header,
   },
   methods: {
-    ...mapActions(["setPagesActions"]),
+    ...mapActions(["setPagesActions", "setCategoriesActions"]),
   },
 
   async created() {
     this.setPagesActions();
+    this.setCategoriesActions();
   },
 };
 </script>

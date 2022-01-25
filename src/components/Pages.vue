@@ -1,6 +1,6 @@
 <template>
   <div class="row mt-3">
-    <div class="col">categories</div>
+    <CategoriesList />
     <div class="col-9">
       {{ pageContent }}
     </div>
@@ -9,10 +9,12 @@
 
 <script>
 import { mapState } from "vuex";
-// import Header from "./components/Header.vue";
+import CategoriesList from "./CategoriesList.vue";
 
 export default {
-  components: {},
+  components: {
+    CategoriesList,
+  },
   computed: {
     ...mapState(["pages"]),
     pageContent() {
