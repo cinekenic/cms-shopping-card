@@ -16,6 +16,8 @@ export default new Vuex.Store({
   getters: {},
   mutations: {
     setPages(state, pages) {
+      console.log(state);
+      console.log(pages);
       state.pages = pages;
     },
   },

@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark">
     <router-link class="navbar-brand" to="/">ShoppingCart</router-link>
     <button
       class="navbar-toggler"
