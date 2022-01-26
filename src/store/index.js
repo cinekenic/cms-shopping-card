@@ -16,6 +16,9 @@ export default new Vuex.Store({
     pages: [],
     categoriesList: [],
     products: [],
+    currentPage: 1,
+    pageCount: 0,
+    pageSize: 4,
   },
   getters: {
     categories: (state) => ["All", ...state.categoriesList],
@@ -43,9 +46,13 @@ export default new Vuex.Store({
     async setProductsByCategoryActions(contex, category) {
       let url;
       if (category !== "All") {
-        url = productsUrl + `?category=${category}`;
+        url =
+          productsUrl +
+          `?category=${category}&_page=${contex.state.currentPage}&_limit=${contex.state.pageSize}`;
       } else {
-        url = productsUrl;
+        url =
+          productsUrl +
+          `?_page=${contex.state.currentPage}&_limit=${contex.state.pageSize}`;
       }
       contex.commit("setProducts", (await Axios.get(url)).data);
     },
