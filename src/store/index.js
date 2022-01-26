@@ -19,6 +19,7 @@ export default new Vuex.Store({
     currentPage: 1,
     pageCount: 0,
     pageSize: 4,
+    currentCategory: "All",
   },
   getters: {
     categories: (state) => ["All", ...state.categoriesList],
@@ -35,6 +36,18 @@ export default new Vuex.Store({
     setProducts(state, products) {
       state.products = products;
     },
+
+    setPageCount(state, count) {
+      state.pageCount = Math.ceil(Number(count) / state.pageSize);
+    },
+
+    setCurrentPage(state, page) {
+      state.currentPage = page;
+    },
+
+    setCurrentCategory(state, category) {
+      state.currentCategory = category;
+    },
   },
   actions: {
     async setPagesActions(contex) {
@@ -43,18 +56,38 @@ export default new Vuex.Store({
     async setCategoriesActions(contex) {
       contex.commit("setCategories", (await Axios.get(categoriesUrl)).data);
     },
-    async setProductsByCategoryActions(contex, category) {
+    async setProductsByCategoryActions(context, category) {
       let url;
       if (category !== "All") {
         url =
           productsUrl +
-          `?category=${category}&_page=${contex.state.currentPage}&_limit=${contex.state.pageSize}`;
+          `?category=${category}&_page=${context.state.currentPage}&_limit=${context.state.pageSize}`;
       } else {
         url =
           productsUrl +
-          `?_page=${contex.state.currentPage}&_limit=${contex.state.pageSize}`;
+          `?_page=${context.state.currentPage}&_limit=${context.state.pageSize}`;
       }
-      contex.commit("setProducts", (await Axios.get(url)).data);
+
+      let response = await Axios.get(url);
+      //get total numbers of items from some url in json server
+      context.commit("setPageCount", response.headers["x-total-count"]);
+
+      context.commit("setProducts", (await Axios.get(url)).data);
+
+      console.log(context.state.pageCount);
+    },
+
+    async setProductsByCategoryPaginationActions(context, page) {
+      let url;
+      if (context.state.currentCategory !== "All") {
+        url =
+          productsUrl +
+          `?category=${context.state.currentCategory}&_page=${page}&_limit=${context.state.pageSize}`;
+      } else {
+        url = productsUrl + `?_page=${page}&_limit=${context.state.pageSize}`;
+      }
+
+      context.commit("setProducts", (await Axios.get(url)).data);
     },
   },
 });
